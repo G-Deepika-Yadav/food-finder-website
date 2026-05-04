@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Finder</title>
+
+    <!-- 📱 Responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600") no-repeat center;
+    background-size: cover;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 15px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+
+    background: linear-gradient(45deg, #ff5722, #ff9800);
+}
+
+/* CHEF IMAGE FIXED */
+.chef-left {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* MAP */
+#map {
+    height: 350px;
+}
+
+/* SECTION TITLES */
+h2 {
+    margin-left: 20px;
+    color: white;
+}
+
+/* RECOMMEND SECTION */
+.recommend-section {
+    background: rgba(0,0,0,0.7);
+    margin: 0px;
+    padding: 0px;
+    border-radius: 0px;
+}
+
+.recommend-section h2 {
+    color: gold;
+}
+
+/* LIST */
+#list, #recommendations {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* CARD */
+.card {
+    background: white;
+    border-radius: 15px;
+    margin: 15px;
+    width: 260px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 10px;
+}
+
+/* BUTTONS */
+button {
+    margin: 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+}
+
+.zomato { background: #e23744; }
+.swiggy { background: #fc8019; }
+
+/* SEARCH */
+#searchInput {
+    width: 80%;
+    padding: 10px;
+    margin: 10px auto;
+    display: block;
+    border-radius: 8px;
+}
+
+/* BADGE */
+.badge {
+    position: absolute;
+    background: gold;
+    color: black;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    top: 10px;
+    left: 10px;
+}
+
+/* THANK NOTE */
+.thank-note {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: black;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    z-index: 999;
+}
+/* button */
+#chatBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    background: #ff5722;
+    color: white;
+
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+    cursor: pointer;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    z-index: 9999;
+}
+
+/* chat box */
+#chatBox {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+
+    width: 300px;
+    height: 400px;
+
+    background: white;
+    border-radius: 15px;
+
+    display: none;
+    flex-direction: column;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    overflow: hidden;
+
+    z-index: 9999;
+}
+
+/* header */
+.chat-header {
+    background: #ff5722;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+}
+
+/* messages */
+#chatMessages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 14px;
+}
+
+/* input */
+#chatInput {
+    border: none;
+    padding: 10px;
+    outline: none;
+    border-top: 1px solid #ccc;
+}
+    </style>
+</head>
+
+<body>
+    <!-- 🤖 CHAT BUTTON -->
+<div id="chatBtn" onclick="toggleChat()">💬</div>
+
+<!-- 💬 CHAT BOX -->
+<div id="chatBox">
+    <div class="chat-header">🤖 Food Assistant</div>
+
+    <div id="chatMessages"></div>
+
+    <input 
+        type="text" 
+        id="chatInput" 
+        placeholder="Ask something..."
+        onkeypress="handleChat(event)"
+    >
+</div>
+
+<!-- 🌙 DARK BUTTON -->
+<button onclick="toggleDark()">🌙</button>
+
+<!-- HEADER -->
+<header>
+    <img src="https://thumbs.dreamstime.com/b/cartoon-chef-fat-vector-clip-art-illustration-simple-gradients-all-single-layer-64543945.jpg" class="chef-left">
+    🍴 Welcome to Food Finder...
+</header>
+
+<h2>📍 Map</h2>
+<div id="map"></div>
+
+<h2>🍽 Restaurants Near You</h2>
+
+<input 
+    type="text" 
+    id="searchInput" 
+    placeholder="Search restaurants or food..." 
+    onkeyup="searchRestaurants()"
+>
+
+<div id="list"></div>
+
+<!-- THANK NOTE -->
+<div class="thank-note">
+    💖 Thank you for visiting! — Deepika
+</div>
+
+<!-- JS -->
+<script src="script.js"></script>
+
+<!-- MAP -->
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCixUhV3Q3HVZHGX820ZR1E02T_8jBbzIQ&callback=initMap">
+</script>
+</body>
+</html>
